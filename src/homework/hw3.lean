@@ -30,20 +30,6 @@ by assuming a proof of P, p, and apply the intro rule for ∨ using the assumed 
 QED.
 -/
 begin
-  assume P, 
-  apply iff.intro _ _,
-  -- forward
-    assume porp,
-    apply or.elim porp,
-    -- left disjunct is true
-      assume p,
-      exact p,
-    -- right disjunct is true
-      assume p,
-      exact p,
-  -- backwards
-    assume p,
-    exact or.intro_left P p,
 end
 
 example : ∀ (P : Prop), P ∧ P ↔ P := 
