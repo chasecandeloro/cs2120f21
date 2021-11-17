@@ -136,7 +136,9 @@ begin
   exact rfl,
 end
 
-example (n : ℕ): equivalence (cong_mod_nat n) :=
+
+-- You prove it
+example : ∀ n, equivalence (cong_mod_nat n) :=
 begin
 <<<<<<< HEAD
   unfold equivalence,

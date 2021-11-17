@@ -1,4 +1,5 @@
 import data.set
+import tactic.ring
 
 namespace relation
 
@@ -45,6 +46,14 @@ begin
   apply asym rxx,
   apply rxx,
 end
+
+/-
+
+-/
+/-
+The proposition is not true without the condition that β is inhabitied, because
+in the case of an empty set the relation cannot be irreflexive.
+-/
 
 
 /-
@@ -123,21 +132,41 @@ into English. (Or if you wanted to be truly Hobbit-like you could say
 -- A: For any n, 1 divides n.
 example : ∀ n, divides 1 n :=
 begin
+  unfold divides,
+  intros,
+  apply exists.intro (n:ℕ),
+  ring,
 end
 
 -- B. For any n, n divides n
 example : ∀ n, divides n n :=
 begin
+  intros,
+  unfold divides,
+  apply exists.intro (1:ℕ),
+  ring,
 end
 
 -- #C. prove that divides is reflexive 
 example : reflexive divides :=
 begin
+  unfold reflexive divides,
+  intros,
+  apply exists.intro (1:ℕ),
+  ring,
 end 
 
 -- #D. prove that divides is transitive
 example : transitive divides :=
 begin
+  unfold transitive divides,
+  intros x y z,
+  intros ex1 ex2,
+  cases ex1 with w pf1,
+  cases ex2 with w pf2,
+  apply exists.intro w _,
+  apply eq.trans pf2,
+  ring,
 end 
 
 /- 
@@ -153,6 +182,11 @@ it's not.
 -/
 example : anti_symmetric divides := 
 begin  
+  unfold anti_symmetric divides,
+  intros x y a1 a2,
+  cases a1 with w1 pf1,
+  cases a2 with w1 pf2,
+  apply eq.subst 
 end
 
 
@@ -168,16 +202,30 @@ problems.
 -- A
 example : asymmetric r → irreflexive r :=
 begin
+  unfold asymmetric irreflexive,
+  intros a x,
+  apply not.intro,
+  assume rxx,
+  apply a rxx,
+  apply rxx,
 end
 
 -- B
 example : irreflexive r → transitive r → asymmetric r :=
 begin
+  unfold irreflexive transitive asymmetric,
+  intros a a1 x y rxy,
+  apply not.intro,
+  assume ryx,
+  
 end
 
 -- C
 example : transitive r → ¬ symmetric r → ¬ irreflexive r :=
 begin
+  unfold transitive symmetric irreflexive,
+  intros a1 a2 a3,
+
 end
 
 
