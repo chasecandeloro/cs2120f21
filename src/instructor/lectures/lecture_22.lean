@@ -140,7 +140,6 @@ end
 -- You prove it
 example : ∀ n, equivalence (cong_mod_nat n) :=
 begin
-<<<<<<< HEAD
   unfold equivalence,
   split,
   -- 1
@@ -172,6 +171,3 @@ because the mod relation is based on equality. Also
 congruence mod n is transitive by the transitivity of
 equality because the mod relation is based on equality.
 -/
-=======
-end
->>>>>>> 3a98dd22f277d116a198e60e11624be546803c1f

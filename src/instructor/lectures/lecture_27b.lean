@@ -2,6 +2,7 @@ import .lecture_26
 import data.set
 
 namespace relations
+
 section functions
 
 variables {α β γ : Type} (r : α → β → Prop)
@@ -183,6 +184,22 @@ example :
   image_set r (dom r) = { b : β | true } :=
 begin
 -- homework (on your own ungraded but please do it!)
+  assume surj,
+  apply set.ext,
+  intros,
+  split,
+  -- 1
+    assume imgset,
+    unfold surjective at surj,
+  -- 2
+    assume xinb,
+    unfold surjective at surj,
+    unfold image_set,
+    have total:= and.elim_left surj,
+    have amapsb := and.elim_right surj,
+    unfold total_function at total,
+    unfold defined at total,
+    apply 
 end
 
 /-
@@ -418,30 +435,121 @@ def bijectivep := function r ∧ bijective (dom_res r (dom_of_def r))
 
 
 
--- #2: Prove that the inverse of a bijective function is bijective.
+-- EXERCISE #2: Prove that the inverse of a bijective function is bijective.
 example : bijective r → bijective (inverse r) :=
 begin
+  assume bijr,
+  unfold bijective at bijr,
+  unfold bijective,
+  apply and.intro,
+  -- 1
+    cases bijr,
+    unfold inverse,
+    unfold surjective,
+    split,
+    -- 1
+      unfold total_function,
+      split,
+      -- 1
+        unfold function,
+        unfold single_valued,
+        assume x,
+        assume y z,
+        assume ryx,
+        assume rzx,
+        unfold surjective at bijr_left,
+        unfold total_function at bijr_left,
+        cases bijr_right,
+        apply bijr_right_right ryx rzx,
+      -- 2
+        unfold defined,
+        unfold surjective at bijr_left,
+        apply and.elim_right bijr_left,
+    -- 2
+      unfold surjective at bijr_left,
+      cases bijr_right,
+      cases bijr_left,
+      unfold total_function at bijr_left_left,
+      cases bijr_left_left,
+      unfold defined at bijr_left_left_right,
+      apply bijr_left_left_right,
+  -- 2
+    cases bijr,
+    unfold inverse,
+    unfold injective,
+    split,
+    -- 1
+      unfold total_function,
+      split,
+      -- 1
+        unfold function,
+        unfold single_valued,
+        unfold injective at bijr_right,
+        assume x,
+        assume y z,
+        assume ryx,
+        assume rzx,
+        cases bijr_right,
+        apply bijr_right_right ryx rzx,
+      -- 2
+        unfold defined,
+        unfold surjective at bijr_left,
+        apply and.elim_right bijr_left,
+    -- 2
+      unfold injective at bijr_right,
+      assume x y,
+      assume z,
+      assume rzx,
+      assume rzy,
+      cases bijr_right,
+      unfold surjective at bijr_left,
+      unfold total_function at bijr_right_left,
+      cases bijr_right_left,
+      unfold function at bijr_right_left_left,
+      unfold single_valued at bijr_right_left_left,
+      cases bijr_left,
+      unfold defined at bijr_right_left_right,
+      have yeqx := bijr_right_left_left rzy rzx,
+      apply eq.symm yeqx,
 end
 
 
 /-
-#3: Prove that the inverse of the inverse of a bijective
+EXERCISE #3: Prove that the inverse of the inverse of a bijective
 function is that function.
 -/
 example : bijective r → (r = inverse (inverse r)) :=
 begin
+  assume bijr,
+  unfold inverse,
 end
 
 /-
-#4: Formally state and prove that every injective function 
+EXERCISE  #4: Formally state and prove that every injective function 
 has a *function* as an inverse.
 -/
 example : injective r → function (inverse r) :=
-  _ -- hint: remember recent work
-
+  begin
+    assume injr,
+    unfold function,
+    unfold single_valued,
+    unfold inverse,
+    unfold injective at injr,
+    cases injr,
+    assume x,
+    assume y z,
+    assume ryx,
+    assume rzx,
+    unfold total_function at injr_left,
+    cases injr_left,
+    unfold function at injr_left_left,
+    unfold single_valued at injr_left_left,
+    unfold defined at injr_left_right,
+    apply injr_right ryx rzx,
+  end
 
 /-
-#5. Is bijectivity transitive? In other words, if the
+EXERCISE #5. Is bijectivity transitive? In other words, if the
 relations, s and r, are both bijective, then is the
 composition, s after r, also always bijective? Now
 we'll see.
@@ -455,7 +563,47 @@ False? Present a counterexample.
 -/
 def bij_trans (s : β → γ → Prop)  (r : α → β → Prop) :
   bijective r → bijective s → bijective (composition s r) := 
-  _
+  begin
+    assume bijr,
+    assume bijs,
+    unfold bijective,
+    split,
+    -- 1
+      unfold surjective,
+      split,
+      -- 1
+        unfold total_function,
+        split,
+        -- 1
+          unfold function,
+          unfold single_valued,
+          assume x,
+          assume y z,
+          assume compsrxy,
+          assume compsrxz,
+          unfold composition at compsrxy compsrxz,
+          cases compsrxz with b1 pf1,
+          cases compsrxy with b2 pf2,
+          cases pf1,
+          cases pf2,
+          unfold bijective at bijr bijs,
+          cases bijs,
+          cases bijr,
+          unfold surjective at bijs_left bijr_left,
+          cases bijs_left,
+          cases bijr_left,
+          unfold injective at bijs_right bijr_right,
+          cases bijs_right,
+          cases bijr_right,
+          unfold total_function at bijs_left_left bijr_left_left,
+          cases bijr_left_left,
+          cases bijs_left_left,
+          unfold function at bijr_left_left_left bijs_left_left_left,
+          unfold single_valued at bijs_left_left_left bijr_left_left_left,
+          have h:= bijs_left_left_left,
+          
+          
+  end
 
 /-
 In general, an operation (such as inverse, here) that, 
